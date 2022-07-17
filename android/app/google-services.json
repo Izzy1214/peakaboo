@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "911198071314",
+    "project_id": "peak-app-project",
+    "storage_bucket": "peak-app-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:911198071314:android:33a86d85622d29864286cb",
+        "android_client_info": {
+          "package_name": "com.example.peak_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "911198071314-7afrt0t40uu9co61229t5q0nk23vqhdd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlMqZbZmgR9cEriG2_Ou8MHh7mjE956yE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "911198071314-7afrt0t40uu9co61229t5q0nk23vqhdd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

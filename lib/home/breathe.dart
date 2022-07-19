@@ -26,11 +26,12 @@ class _BreathePageState extends State<BreathePage>
 
     _pevRef.child('Peak Expiratory Value').onValue.listen((event) {
       var snapshot = event.snapshot;
-      var pevv = try.parse(snapshot.value) as double;
+      var pevv = snapshot.value;
       print('Value is $pevv');
-      double peak = 402;
+      var p = int.parse(pevv.toString());
+      double peak = p / 1;
       isLoading = true;
-      _DashboardInit(pevv);
+      _DashboardInit(peak);
     });
   }
 

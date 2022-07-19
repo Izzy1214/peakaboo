@@ -26,21 +26,21 @@ class _BreathePageState extends State<BreathePage>
 
     _pevRef.child('Peak Expiratory Value').onValue.listen((event) {
       var snapshot = event.snapshot;
-      var pevv = snapshot.value;
+      var pevv = try.parse(snapshot.value) as double;
       print('Value is $pevv');
-      double peak = 302;
+      double peak = 402;
       isLoading = true;
-      _DashboardInit(peak);
+      _DashboardInit(pevv);
     });
   }
 
   @override
-  _DashboardInit(peak) {
+  _DashboardInit(pevv) {
     progressController = AnimationController(
         vsync: this, duration: Duration(milliseconds: 5000)); //5s
 
     pevAnimation =
-        Tween<double>(begin: 0, end: peak).animate(progressController)
+        Tween<double>(begin: 0, end: pevv).animate(progressController)
           ..addListener(() {
             setState(() {});
           });

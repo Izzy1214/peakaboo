@@ -1,11 +1,10 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:peak_app/breather/screen3.dart';
+import 'package:flutter_sms/flutter_sms.dart';
 import 'package:peak_app/home/breathe.dart';
-import 'package:peak_app/home/emergency.dart';
-import 'package:peak_app/home/history.dart';
+import 'package:peak_app/home/upProfile.dart';
 import 'package:peak_app/home/profile.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,6 +13,10 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
+
+String messages =
+    "This is an Emergency, Patient with Id No. 001 is in dire need of medical attention";
+List<String> recipient = ["+2348066213206", "+2348166795479"];
 
 class _HomePageState extends State<HomePage> {
   @override
@@ -54,11 +57,11 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () => {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => HistoryPage()),
+                        MaterialPageRoute(builder: (context) => UpdatePage()),
                       )
                     },
                     splashColor: Colors.redAccent,
-                    child: Text("History"),
+                    child: Text("Update Profile"),
                   )),
             ],
           ),
@@ -72,13 +75,7 @@ class _HomePageState extends State<HomePage> {
                     minWidth: 150.0,
                     color: Colors.deepPurple,
                     textColor: Colors.white,
-                    onPressed: () => {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => EmergencyPage()),
-                      )
-                    },
+                    onPressed: () => {_sendSMS(messages, recipient)},
                     splashColor: Colors.redAccent,
                     child: Text("Emergency"),
                   )),
@@ -111,5 +108,14 @@ class _HomePageState extends State<HomePage> {
             child: Text('Sign Out'),
           )
         ])));
+  }
+
+  void _sendSMS(String message, List<String> recipients) async {
+    String result = await sendSMS(
+            message: message, recipients: recipients, sendDirect: true)
+        .catchError((onError) {
+      print(onError);
+    });
+    print(result);
   }
 }

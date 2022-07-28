@@ -1,23 +1,19 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, file_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class RegPage extends StatefulWidget {
-  final VoidCallback showLoginPage;
-  const RegPage({Key? key, required this.showLoginPage}) : super(key: key);
+class UpdatePage extends StatefulWidget {
+  const UpdatePage({Key? key}) : super(key: key);
 
   @override
-  State<RegPage> createState() => _RegPageState();
+  State<UpdatePage> createState() => _UpdatePageState();
 }
 
-class _RegPageState extends State<RegPage> {
-// text controllers
+class _UpdatePageState extends State<UpdatePage> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmpassController = TextEditingController();
   final _minValueController = TextEditingController();
   final _genderController = TextEditingController();
   final _phonenoController = TextEditingController();
@@ -28,8 +24,6 @@ class _RegPageState extends State<RegPage> {
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
-    _passwordController.dispose();
-    _confirmpassController.dispose();
     _genderController.dispose();
     _minValueController.dispose();
     _phonenoController.dispose();
@@ -38,15 +32,10 @@ class _RegPageState extends State<RegPage> {
     super.dispose();
   }
 
-  Future signUp() async {
+  Future saveDetails() async {
     //authentication
-    if (passwordConfirmed()) {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
-      //add user details
-      addUserDetails(
+    if (_nameController.text.trim() == _nameController.text.trim()) {
+      updateDetails(
         _nameController.text.trim(),
         int.parse(_minValueController.text.trim()),
         _genderController.text.trim(),
@@ -58,10 +47,10 @@ class _RegPageState extends State<RegPage> {
     }
   }
 
-  Future addUserDetails(String fullname, int minValue, String gender,
+  Future updateDetails(String fullname, int minValue, String gender,
       String email, int medical, int phoneno, int emergency) async {
     final user = FirebaseAuth.instance.currentUser;
-    await FirebaseFirestore.instance.collection('Users').doc(user!.uid).set({
+    await FirebaseFirestore.instance.collection('Users').doc(user!.uid).update({
       'Full Name': fullname,
       'minValue': minValue,
       'Gender': gender,
@@ -72,29 +61,23 @@ class _RegPageState extends State<RegPage> {
     });
   }
 
-  bool passwordConfirmed() {
-    if (_passwordController.text.trim() == _confirmpassController.text.trim()) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: Text("Update Page"),
+        ),
         body: SafeArea(
             child: Center(
                 child: SingleChildScrollView(
           child: Column(children: [
             SizedBox(height: 15),
             Image(
-              image: AssetImage("images/peak_monitor.png"),
+              image: AssetImage("images/user-286.png"),
             ),
             // Hello Again!
             Text(
-              "Create Account!",
+              "Update User Details",
               style: TextStyle(
                 fontSize: 36,
               ),
@@ -254,57 +237,11 @@ class _RegPageState extends State<RegPage> {
               ),
             ),
             SizedBox(height: 10),
-            // password textfield
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  border: Border.all(color: Colors.white),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20.0),
-                  child: TextField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Password',
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 10),
-            // confirm password textfield
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  border: Border.all(color: Colors.white),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20.0),
-                  child: TextField(
-                    controller: _confirmpassController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Confirm Password',
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 10),
             // Register button
             Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: GestureDetector(
-                  onTap: signUp,
+                  onTap: saveDetails,
                   child: Container(
                     padding: const EdgeInsets.all(25.0),
                     decoration: BoxDecoration(
@@ -313,7 +250,7 @@ class _RegPageState extends State<RegPage> {
                     ),
                     child: Center(
                         child: Text(
-                      'Register!',
+                      'Save',
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -322,26 +259,6 @@ class _RegPageState extends State<RegPage> {
                     )),
                   ),
                 )),
-            SizedBox(height: 25),
-            // Already have an account? Sign in now
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text(
-                'Already have an account?',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              GestureDetector(
-                onTap: widget.showLoginPage,
-                child: Text(
-                  '  Sign in Now!',
-                  style: TextStyle(
-                    color: Colors.purpleAccent,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ]),
           ]),
         ))));
   }

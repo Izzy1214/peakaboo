@@ -38,7 +38,7 @@ class _ProfilePageState extends State<ProfilePage> {
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: StreamBuilder<DocumentSnapshot>(
-          stream: usersCollection.doc('tunQSi9kn4kVqanxWCPf').snapshots(),
+          stream: usersCollection.doc(_auth!.uid).snapshots(),
           builder: (ctx, streamSnapshot) {
             if (streamSnapshot.connectionState == ConnectionState.waiting) {
               return Center(

@@ -33,8 +33,8 @@ dependencies:
   firebase_database: ^9.0.18  
   flutter_animation_progress_bar: ^2.2.1
   flutter_icons_null_safety: ^1.1.0
+  flutter_sms: ^2.3.3
   marquee_widget: ^1.0.0-nullsafety
-  rflutter_alert: ^2.0.4
   flutter:
     sdk: flutter
     
@@ -64,14 +64,8 @@ flutter:
   assets: 
   - images/peak_monitor.png
   - images/logo.png
-  - images/video-play-button.png
-  - images/breathing.png
-  - images/home.svg
-  - images/logo.png
-  - images/doctor.png
-  - images/duno2.png
-  - images/time-past.svg
-  - images/user-add.svg
+  - images/user-286.png
+  
 
 
 

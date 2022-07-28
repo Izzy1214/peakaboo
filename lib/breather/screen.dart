@@ -8,7 +8,7 @@ Widget buildShowUserNameAndEmail({String? text, IconData? icon}) {
     padding: EdgeInsets.all(20.0),
     height: 100,
     decoration: BoxDecoration(
-      color: Colors.blueAccent,
+      color: Colors.purpleAccent,
       borderRadius: BorderRadius.circular(10),
     ),
     child: Row(

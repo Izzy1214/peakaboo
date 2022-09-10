@@ -1,8 +1,9 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, use_build_context_synchronously, unused_element
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class RegPage extends StatefulWidget {
   final VoidCallback showLoginPage;
@@ -13,6 +14,9 @@ class RegPage extends StatefulWidget {
 }
 
 class _RegPageState extends State<RegPage> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  User? user = FirebaseAuth.instance.currentUser;
+  var credential = UserCredential;
 // text controllers
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -304,7 +308,9 @@ class _RegPageState extends State<RegPage> {
             Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: GestureDetector(
-                  onTap: signUp,
+                  onTap: () async {
+                    signUp();
+                  },
                   child: Container(
                     padding: const EdgeInsets.all(25.0),
                     decoration: BoxDecoration(
@@ -345,4 +351,118 @@ class _RegPageState extends State<RegPage> {
           ]),
         ))));
   }
+
+  // showAlertDialog(BuildContext context) {
+  //   Navigator.pop(context);
+  //   // set up the button
+  //   Widget okButton = TextButton(
+  //     child: Text(
+  //       "OK",
+  //       style: GoogleFonts.lato(fontWeight: FontWeight.bold),
+  //     ),
+  //     onPressed: () {
+  //       Navigator.pop(context);
+  //     },
+  //   );
+
+  //   // set up the AlertDialog
+  //   AlertDialog alert = AlertDialog(
+  //     title: Text(
+  //       "Error!",
+  //       style: GoogleFonts.lato(
+  //         fontWeight: FontWeight.bold,
+  //       ),
+  //     ),
+  //     content: Text(
+  //       "Email already Exists",
+  //       style: GoogleFonts.lato(),
+  //     ),
+  //     actions: [
+  //       okButton,
+  //     ],
+  //   );
+
+  //   // show the dialog
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return alert;
+  //     },
+  //   );
+  // }
+
+  // showLoaderDialog(BuildContext context) {
+  //   AlertDialog alert = AlertDialog(
+  //     content: Row(
+  //       children: [
+  //         CircularProgressIndicator(),
+  //         Container(
+  //             margin: EdgeInsets.only(left: 15), child: Text("Loading...")),
+  //       ],
+  //     ),
+  //   );
+  //   showDialog(
+  //     barrierDismissible: false,
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return alert;
+  //     },
+  //   );
+  // }
+
+  // bool emailValidate(String email) {
+  //   if (RegExp(
+  //           r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+  //       .hasMatch(email)) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
+
+  // void _registerAccount() async {
+  //   User? user = FirebaseAuth.instance.currentUser;
+  //   var credential;
+
+  //   try {
+  //     credential = await _auth.createUserWithEmailAndPassword(
+  //       email: _emailController.text,
+  //       password: _passwordController.text,
+  //     );
+  //   } catch (error) {
+  //     if (error.toString().compareTo(
+  //             '[firebase_auth/email-already-in-use] The email address is already in use by another account.') ==
+  //         0) {
+  //       showAlertDialog(context);
+  //       print(
+  //           "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+  //       print(User);
+  //     }
+  //   }
+  //   user = credential.user!;
+
+  //   if (user != null) {
+  //     if (!user.emailVerified) {
+  //       await user.sendEmailVerification();
+  //     }
+  //     FirebaseFirestore.instance.collection('Users').doc(user.uid).set({
+  //       'Full Name': _nameController.text,
+  //       'minValue': _minValueController.text,
+  //       'Gender': _genderController.text,
+  //       'Email': _emailController.text,
+  //       'Medical Consultant Contact': _mednoController.text,
+  //       'Phone Number': _phonenoController.text,
+  //       'Emergency Contact': _emergencyController.text,
+  //     }, SetOptions(merge: true));
+
+  //     Navigator.of(context)
+  //         .pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
+  //   } else {}
+  // }
+
+  // void _pushPage(BuildContext context, Widget page) {
+  //   Navigator.of(context).push(
+  //     MaterialPageRoute<void>(builder: (_) => page),
+  //   );
+  // }
 }

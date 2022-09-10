@@ -1,5 +1,5 @@
 // import 'package:firebase_auth/firebase_auth.dart';
-// ignore_for_file: prefer_const_constructors, avoid_print
+// ignore_for_file: prefer_const_constructors, avoid_print, library_private_types_in_public_api
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,32 +17,40 @@ class BreathePage extends StatefulWidget {
 
 class _BreathePageState extends State<BreathePage>
     with SingleTickerProviderStateMixin {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  User? user = FirebaseAuth.instance.currentUser;
   bool isLoading = false;
   late String peakText;
   final DatabaseReference _pevRef = FirebaseDatabase.instance
       .refFromURL('https://peak-app-project-default-rtdb.firebaseio.com/');
   late AnimationController progressController;
   late Animation<double> pevAnimation;
-  String messages =
-      "This is an Emergency, Patient with Id No. 001 is in dire need of medical attention";
-  List<String> recipient = ["+2348066213206", "+2348166795479"];
 
   @override
   void initState() {
     super.initState();
     peakText = "Showing result Here Soon ...";
-    _pevRef.child('Peak Expiratory Value').onValue.listen((event) {
+    _pevRef.child('Peak Expiratory Value').onValue.listen((event) async {
       var snapshot = event.snapshot;
       var pevv = snapshot.value;
       print('Value is $pevv');
       var p = int.parse(pevv.toString());
       double peak = p / 1;
-      if (peak < 400) {
+      var collection = FirebaseFirestore.instance.collection('Users');
+      var docSnapshot = await collection.doc(user!.uid).get();
+      Map<String, dynamic>? data = docSnapshot.data();
+      var value = data?['minValue'];
+      var num1 = data?['Emergency Contact'];
+      var num2 = data?['Medical Consultant Contact'];
+      String messages =
+          "This is an Emergency, Patient with Id No. 001 is in dire need of medical attention";
+      List<String> recipient = ["+234$num1", "+234$num2"];
+      if (peak < value) {
         _sendSMS(messages, recipient);
-        _setMarqueeText(peak);
+        _setMarqueeText(peak, value);
       } else {
         savePeak(peak);
-        _setMarqueeText(peak);
+        _setMarqueeText(peak, value);
       }
       isLoading = true;
       _DashboardInit(peak);
@@ -126,9 +134,9 @@ class _BreathePageState extends State<BreathePage>
     });
   }
 
-  _setMarqueeText(peak) {
+  _setMarqueeText(peak, value) {
     peakText = "PEV: ${peak.toStringAsFixed(1)} L/MIN, ";
-    if (peak > 0 && peak < 400) {
+    if (peak > 0 && peak < value) {
       peakText += "Emergency Message Sent  ";
     } else if (peak > 400 && peak <= 1000) {
       peakText += "Peak Expiratory Value is in safe Zone  ";

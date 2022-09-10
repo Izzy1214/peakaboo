@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sms/flutter_sms.dart';
@@ -14,9 +15,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-String messages =
-    "This is an Emergency, Patient with Id No. 001 is in dire need of medical attention";
-List<String> recipient = ["+2348066213206", "+2348166795479"];
+final FirebaseAuth _auth = FirebaseAuth.instance;
+User? user = FirebaseAuth.instance.currentUser;
 
 class _HomePageState extends State<HomePage> {
   @override
@@ -75,7 +75,18 @@ class _HomePageState extends State<HomePage> {
                     minWidth: 150.0,
                     color: Colors.deepPurple,
                     textColor: Colors.white,
-                    onPressed: () => {_sendSMS(messages, recipient)},
+                    onPressed: () async {
+                      var collection =
+                          FirebaseFirestore.instance.collection('Users');
+                      var docSnapshot = await collection.doc(user!.uid).get();
+                      Map<String, dynamic>? data = docSnapshot.data();
+                      var num1 = data?['Emergency Contact'];
+                      var num2 = data?['Medical Consultant Contact'];
+                      String messages =
+                          "This is an Emergency, Patient with Id No. 001 is in dire need of medical attention";
+                      List<String> recipient = ["+234$num1", "+234$num2"];
+                      _sendSMS(messages, recipient);
+                    },
                     splashColor: Colors.redAccent,
                     child: Text("Emergency"),
                   )),

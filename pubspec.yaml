@@ -35,6 +35,7 @@ dependencies:
   flutter_icons_null_safety: ^1.1.0
   flutter_sms: ^2.3.3
   marquee_widget: ^1.0.0-nullsafety
+  google_fonts: ^3.0.1
   flutter:
     sdk: flutter
     
